@@ -47,13 +47,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" runat="server" href="~/">Имя приложения</a>
+                    <a class="navbar-brand" runat="server" href="~/">Компьютерная игра "Дурак"</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Домашняя</a></li>
-                        <li><a runat="server" href="~/About">Информация</a></li>
-                        <li><a runat="server" href="~/Contact">Связаться</a></li>
+                        <li><a runat="server" href="~/">Комнаты</a></li>
+                        <li><a runat="server" href="~/About">Поиск комнаты(автоматически)</a></li>
+                        <li><a runat="server" href="~/Contact">Открыть комнату</a></li>
                     </ul>
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
@@ -79,7 +79,7 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - мое приложение ASP.NET</p>
+                <p>&copy; <%: DateTime.Now.Year %> - Приложение является полетом фантазии студентов гр 147 Бекрнева, Андреева, Липчинского</p>
             </footer>
         </div>
     </form>

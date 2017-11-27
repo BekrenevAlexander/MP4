@@ -141,11 +141,11 @@ namespace MP4_Durak.Models
         }
 
         //Печать колоды
-        public void PrintPack()
-        {
-            return
-               pack.FindIndex(card => (card.CardSuit == s) && (card.TheCard == c));
-        }
+        //public void PrintPack()
+        //{
+        //    return 
+        //       pack.FindIndex(card => (card.CardSuit == s) && (card.TheCard == c));
+        //}
 
         //Поиск позиции заданной карты в колоде
         public int FindCardInPack(CardName c, SuitName s)
