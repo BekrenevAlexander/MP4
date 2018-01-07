@@ -40,10 +40,7 @@ namespace MP4_Durak.Logic
             {
                 try
                 {
-                    lock (rooms)
-                    {
-                        rooms.RemoveAll(t => t.LastActionTime.Subtract(DateTime.Now).TotalMinutes > 1);
-                    }
+
                     lock (games)
                     {
                         List<Tuple<Guid, Game>> endedGames =
@@ -51,6 +48,10 @@ namespace MP4_Durak.Logic
                         foreach (Tuple<Guid, Game> endedGame in endedGames)
                         {
                             games.Remove(endedGame);
+                            lock (rooms)
+                            {
+                                rooms.RemoveAll(t => t.Id.Equals(endedGame.Item1));
+                            }
                         }
                     }
 
