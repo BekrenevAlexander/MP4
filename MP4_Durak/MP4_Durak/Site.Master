@@ -51,7 +51,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Комнаты</a></li>
+                        <li><a runat="server" href="~/ListRooms">Комнаты</a></li>
                         <li><a runat="server" href="~/About">Поиск комнаты(автоматически)</a></li>
                         <li><a runat="server" href="~/Contact">Открыть комнату</a></li>
                     </ul>
