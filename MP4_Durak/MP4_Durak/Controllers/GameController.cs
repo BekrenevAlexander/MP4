@@ -81,6 +81,20 @@ namespace MP4_Durak
         {
             RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).Defend(attackCard, defendCard);
         }
+        [HttpGet]
+        [ActionName("doSmth")]
+        public void DoSmth(string gameId, int attackCard, int defendCard)
+        {
+            Game game = RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
+            if (game.GetAttacker().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                game.Attack(attackCard);
+            }
+            if (game.GetDefender().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                game.Defend(attackCard, defendCard);
+            }
+        }
 
         [HttpGet]
         [ActionName("defenderGetCards")]
