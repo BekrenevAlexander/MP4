@@ -32,10 +32,10 @@ namespace MP4_Durak
 
         [HttpGet]
         [ActionName("getAttackCards")]
-        public List<int> GetAttackCards(string gameId)
+        public List<CardPair> GetCardsOnTable(string gameId)
         {
             Game game = RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
-            return game.GetAttackCards();
+            return game.GetAllCardsOnTable();
         }
 
         [HttpGet]

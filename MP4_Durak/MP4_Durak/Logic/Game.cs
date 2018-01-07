@@ -223,9 +223,9 @@ namespace Durak.Api
             }
         }
 
-        public List<int> GetAttackCards()
+        public List<CardPair> GetAllCardsOnTable()
         {
-            return _currentRound.GetAllAttackCards();
+            return _currentRound.GetAllCardsOnTable();
         } 
     }
 }

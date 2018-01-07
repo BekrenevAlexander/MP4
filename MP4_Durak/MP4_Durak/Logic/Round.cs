@@ -105,9 +105,9 @@ namespace Durak.Api
             }
             return cards;
         }
-        public List<int> GetAllAttackCards()
+        public List<CardPair> GetAllCardsOnTable()
         {
-            return _cardPairs.Select(cardPair => cardPair.Attack).ToList();
+            return _cardPairs;
         }
     }
 }
