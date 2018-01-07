@@ -23,14 +23,11 @@ namespace MP4_Durak.Logic
         }
         public static RoomsService GetInstance()
         {
-            lock (_service)
-            {
                 if (_service == null)
                 {
                     _service=new RoomsService();
                 }
                 return _service;
-            }
         }
 
         public List<Room> GetRooms()
@@ -50,7 +47,7 @@ namespace MP4_Durak.Logic
 
         public Tuple<Guid, Game> CreateGame(Room room)
         {
-            Game game = new Game();
+            Game game = new Game(room.FirstPlayerId,room.SecondPlayerId);
             Tuple<Guid,Game> tuple = new Tuple<Guid, Game>(room.Id,game);
             games.Add(tuple);
             return tuple;
@@ -59,6 +56,16 @@ namespace MP4_Durak.Logic
         public void RemoveGame(Guid id)
         {
             games.RemoveAll(t => t.Item1.Equals(id));
+        }
+
+        public Game GetGame(Guid id)
+        {
+            return games.Find(t => t.Item1.Equals(id)).Item2;
+        }
+
+        public Room GetRoom(Guid id)
+        {
+           return rooms.Find(t => t.Id.Equals(id));
         }
     }
 }
