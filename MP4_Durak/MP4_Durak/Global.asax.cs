@@ -7,6 +7,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
+using MP4_Durak.Logic;
 
 namespace MP4_Durak
 {
@@ -18,6 +19,7 @@ namespace MP4_Durak
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             GlobalConfiguration.Configure(WebApiConfig.Register);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            RoomsService.GetInstance();
         }
     }
 }
