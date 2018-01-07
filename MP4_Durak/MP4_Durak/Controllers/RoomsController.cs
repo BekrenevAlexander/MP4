@@ -38,6 +38,8 @@ namespace MP4_Durak
         [ActionName("connect")]
         public void Connect(Room room)
         {
+            room=RoomsService.GetInstance().GetRoom(room.Id);
+            room.SecondPlayerId = Guid.Parse(User.Identity.GetUserId());
             RoomsService.GetInstance().CreateGame(room);
         }
     }

@@ -69,6 +69,11 @@ namespace MP4_Durak.Logic
             return rooms;
         }
 
+        public Room GetRooms(Guid id)
+        {
+            return rooms.Find(t=>t.Id.Equals(id));
+        }
+
         public void AddRoom(Room room)
         {
             rooms.Add(room);
