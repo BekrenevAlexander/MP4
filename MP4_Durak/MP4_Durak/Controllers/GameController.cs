@@ -30,5 +30,11 @@ namespace MP4_Durak
         {
             RoomsService.GetInstance().RemoveRoom(Guid.Parse(User.Identity.GetUserId()));
         }
+
+
+
+        public void 
+
+
     }
 }
