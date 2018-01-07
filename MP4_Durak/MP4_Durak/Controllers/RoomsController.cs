@@ -36,10 +36,10 @@ namespace MP4_Durak
         }
         [HttpPost]
         [ActionName("connect")]
-        public void Connect(Room room)
+        public void Connect(string roomId)
         {
-            room=RoomsService.GetInstance().GetRoom(room.Id);
-            room.SecondPlayerId = Guid.Parse(User.Identity.GetUserId());
+            Room room=RoomsService.GetInstance().GetRoom(Guid.Parse(roomId));
+            room.SecondPlayerId= Guid.Parse(User.Identity.GetUserId());
             RoomsService.GetInstance().CreateGame(room);
         }
     }
