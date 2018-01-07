@@ -31,7 +31,7 @@ namespace MP4_Durak
         }
 
         [HttpGet]
-        [ActionName("getAttackCards")]
+        [ActionName("getAllCardsOnTable")]
         public List<CardPair> GetCardsOnTable(string gameId)
         {
             Game game = RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
