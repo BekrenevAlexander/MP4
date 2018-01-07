@@ -39,6 +39,22 @@ namespace MP4_Durak
         }
 
         [HttpGet]
+        [ActionName("getEnemyCardsCount")]
+        public int GetEnemyCardsCount(string gameId)
+        {
+            Game game = RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
+            if (game.GetAttacker().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                return game.GetAttacker().Cards.Count;
+            }
+            if (game.GetDefender().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                return game.GetDefender().Cards.Count;
+            }
+            return -1;
+        }
+
+        [HttpGet]
         [ActionName("getAttacker")]
         public bool GetAttacker(string gameId)
         {
