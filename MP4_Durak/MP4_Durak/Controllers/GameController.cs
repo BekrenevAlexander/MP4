@@ -63,7 +63,13 @@ namespace MP4_Durak
         public bool DefenderGetCards(string gameId)
         {
             return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).DefenderGetCards();
+        }
 
+        [HttpGet]
+        [ActionName("isRoundEnd")]
+        public bool IsRoundEnd(string gameId)
+        {
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).DefenderGetCards();
         }
 
         [HttpGet]

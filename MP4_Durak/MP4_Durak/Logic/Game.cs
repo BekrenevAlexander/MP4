@@ -166,6 +166,10 @@ namespace Durak.Api
             lastActionTime = DateTime.Now;
         }
 
+        public bool GetIsRoundEnd()
+        {
+            return _currentRound == null ;
+        }
         public bool DefenderGetCards()
         {
             GetDefender().AddCards(_currentRound.GetAllCards());
