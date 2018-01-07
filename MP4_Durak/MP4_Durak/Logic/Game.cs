@@ -93,11 +93,20 @@ namespace Durak.Api
             return _cards.Peek()/10;
         }
 
-        private void EndRound()
+        private void EndRound(bool firstFirstPlayer)
         {
             _currentRound = null;
-            _player1.AddCards(GetNextCards(6-_player1.Cards.Count));
-            _player2.AddCards(GetNextCards(6 - _player2.Cards.Count));
+            if (firstFirstPlayer)
+            {
+                _player1.AddCards(GetNextCards(6 - _player1.Cards.Count));
+                _player2.AddCards(GetNextCards(6 - _player2.Cards.Count));
+            }
+            else
+            {
+                _player2.AddCards(GetNextCards(6 - _player2.Cards.Count));
+                _player1.AddCards(GetNextCards(6 - _player1.Cards.Count));
+            }
+            
         }
         public Player GetAttacker()
         {
@@ -137,17 +146,28 @@ namespace Durak.Api
             GetDefender().RemoveCard(defendCard);
         }
 
-        public void DefenderGetCards()
+        public bool DefenderGetCards()
         {
             GetDefender().AddCards(_currentRound.GetAllCards());
-            EndRound();
+            EndRound(_isFirstPlayerAttack);
+            return GetAttacker().Cards.Count == 0 || GetDefender().Cards.Count == 0;
         }
 
-        public void DefenderWinRound()
+        public bool DefenderWinRound()
         {
             _isFirstRound = false;
+            EndRound(_isFirstPlayerAttack);
             _isFirstPlayerAttack = !_isFirstPlayerAttack;
-            EndRound();
+            return GetAttacker().Cards.Count == 0|| GetDefender().Cards.Count == 0;
+        }
+
+        public bool GetWhoWin()
+        {
+            if (_player1.Cards.Count == 0)
+                return true;
+            if (_player2.Cards.Count == 0)
+                return false;
+            throw new Exception("Никто не победил");
         }
     }
 }

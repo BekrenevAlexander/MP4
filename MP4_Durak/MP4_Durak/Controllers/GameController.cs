@@ -13,9 +13,12 @@ namespace MP4_Durak
 {
     public class GameController : ApiController
     {
-        public List<int> GetCards(Guid gameId)
+
+        [HttpGet]
+        [ActionName("getCards")]
+        public List<int> GetCards(string gameId)
         {
-            Game game=RoomsService.GetInstance().GetGame(gameId);
+            Game game=RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
             if (game.GetAttacker().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
             {
                 return game.GetAttacker().Cards;
@@ -27,34 +30,54 @@ namespace MP4_Durak
             return null;
         }
 
-        public bool GetAttacker(Guid gameId)
+        [HttpGet]
+        [ActionName("getAttacker")]
+        public bool GetAttacker(string gameId)
         {
-            return RoomsService.GetInstance().GetGame(gameId).IsFirstPlayerAttack;
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).IsFirstPlayerAttack;
         }
 
-        public int GetTrump(Guid gameId)
+        [HttpGet]
+        [ActionName("getTrump")]
+        public int GetTrump(string gameId)
         {
-            return RoomsService.GetInstance().GetGame(gameId).Trump;
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).Trump;
         }
 
-        public void Attack(Guid gameId, int card)
+        [HttpGet]
+        [ActionName("attack")]
+        public void Attack(string gameId, int card)
         {
-            RoomsService.GetInstance().GetGame(gameId).Attack(card);
+            RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).Attack(card);
         }
 
-        public void Defend(Guid gameId, int attackCard, int defendCard)
+        [HttpGet]
+        [ActionName("defend")]
+        public void Defend(string gameId, int attackCard, int defendCard)
         {
-            RoomsService.GetInstance().GetGame(gameId).Defend(attackCard, defendCard);
+            RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).Defend(attackCard, defendCard);
         }
 
-        public void DefenderGetCards(Guid gameId)
+        [HttpGet]
+        [ActionName("defenderGetCards")]
+        public bool DefenderGetCards(string gameId)
         {
-            RoomsService.GetInstance().GetGame(gameId).DefenderGetCards();
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).DefenderGetCards();
+
         }
 
-        public void DefenderWinRound(Guid gameId)
+        [HttpGet]
+        [ActionName("defenderWinRound")]
+        public bool DefenderWinRound(string gameId)
         {
-            RoomsService.GetInstance().GetGame(gameId).DefenderWinRound();
+           return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).DefenderWinRound();
+        }
+
+        [HttpGet]
+        [ActionName("getWhoWin")]
+        public bool GetWhoWin(string gameId)
+        {
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).GetWhoWin();
         }
 
     }
