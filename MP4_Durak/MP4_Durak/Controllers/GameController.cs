@@ -31,6 +31,14 @@ namespace MP4_Durak
         }
 
         [HttpGet]
+        [ActionName("getAttackCards")]
+        public List<int> GetAttackCards(string gameId)
+        {
+            Game game = RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
+            return game.GetAttackCards();
+        }
+
+        [HttpGet]
         [ActionName("getAttacker")]
         public bool GetAttacker(string gameId)
         {

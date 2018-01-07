@@ -104,7 +104,10 @@ namespace Durak.Api
                 cards.AddRange(cardPair.GetCards());
             }
             return cards;
-        } 
-
+        }
+        public List<int> GetAllAttackCards()
+        {
+            return _cardPairs.Select(cardPair => cardPair.Attack).ToList();
+        }
     }
 }

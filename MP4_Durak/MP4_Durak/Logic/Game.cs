@@ -222,5 +222,10 @@ namespace Durak.Api
                 _player2.AddMessage(message);
             }
         }
+
+        public List<int> GetAttackCards()
+        {
+            return _currentRound.GetAllAttackCards();
+        } 
     }
 }
