@@ -62,6 +62,7 @@
                             $.ajax({
                                 type: "post", url: `/api/rooms/connect?roomId=${roomId}`,
                                 success: function (data, text) {
+                                    window.localStorage.setItem('roomId', roomId);
                                     location = '/Game1';
                                 },
                                 error: function (request, status, error) {

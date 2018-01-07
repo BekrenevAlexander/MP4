@@ -100,7 +100,117 @@
     </div>
 
     <script>
+        var roomId = window.localStorage.getItem('roomId');
+        var cards = [];
+        var cardsOnTable = [];
+        var ataker;
+        var trump;
+        if (roomId) {
+            checkStartGame();
+        }
 
+
+        function checkStartGame() {
+            var interval = setInterval(function () {
+                $.ajax({
+                    type: "get", url: `/api/rooms/getGame?roomId=${roomId}`,
+                    success: function (data, text) {
+                        if (data) {
+                            $('.message').remove();
+                            clearTimeout(interval);
+                            startGame();
+                        }
+                    },
+                    error: function (request, status, error) {
+                        console.warn(error);
+                    }
+                });
+            }, 2000);
+        }
+        
+        function startGame() {
+            getCards();
+            getAllCardsOnTable();
+            getAttacker();
+            getTrump();
+        }
+
+
+        function getCards() {
+            $.ajax({
+                type: "get", url: `/api/game/getCards?gameId=${roomId}`,
+                success: function (data, text) {
+                    console.warn('getCards', data);
+                    cards = data;
+                    view.userCards();
+                },
+                error: function (request, status, error) {
+                    console.warn(error);
+                }
+            });
+        }
+
+        function getAllCardsOnTable() {
+            $.ajax({
+                type: "get", url: `/api/game/getAllCardsOnTable?gameId=${roomId}`,
+                success: function (data, text) {
+                    console.warn('getAllCardsOnTable', data);
+                    cardsOnTable = data;
+                },
+                error: function (request, status, error) {
+                    console.warn(error);
+                }
+            });
+        }
+
+        function getAttacker() {
+            $.ajax({
+                type: "get", url: `/api/game/getAttacker?gameId=${roomId}`,
+                success: function (data, text) {
+                    console.warn('getAttacker', data);
+                    cardsOnTable = data;
+                },
+                error: function (request, status, error) {
+                    console.warn(error);
+                }
+            });
+        }
+        
+        function getTrump() {
+            $.ajax({
+                type: "get", url: `/api/game/getTrump?gameId=${roomId}`,
+                success: function (data, text) {
+                    console.warn('getTrump', data);
+                    trump = data;
+                },
+                error: function (request, status, error) {
+                    console.warn(error);
+                }
+            });
+        }
+
+        var view = {
+            userCards: function() {
+                $.each(cards, function (key, card) {
+                    console.warn(cardConvector(card));
+                });
+            },
+
+            table: function () {
+
+            }
+        }
+
+        function cardConvector(cardId) {
+            var mast = {
+                0: 'bubi',
+                1: 'chervi',
+                2: 'kresti',
+                3: 'piki'
+            }
+                
+            return mast[Math.floor(cardId / 9)] + (cardId % 9 + 6);
+        }
     </script>
 
     <style>
@@ -197,7 +307,8 @@
         }
 
         .message {
-            display: none;
+            background: white;
+            z-index: 100;
             position: absolute;
             top: calc(50% - 75px);
             left: calc(50% - 150px);

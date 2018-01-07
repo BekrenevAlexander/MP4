@@ -225,7 +225,14 @@ namespace Durak.Api
 
         public List<CardPair> GetAllCardsOnTable()
         {
-            return _currentRound.GetAllCardsOnTable();
+            try
+            {
+                return _currentRound.GetAllCardsOnTable();
+            }
+            catch
+            {
+                return 
+            }
         } 
     }
 }

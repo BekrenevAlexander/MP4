@@ -44,7 +44,7 @@ namespace MP4_Durak.Logic
                     lock (games)
                     {
                         List<Tuple<Guid, Game>> endedGames =
-                            games.Where(t => t.Item2.LastActionTime.Subtract(DateTime.Now).TotalMinutes > 1).ToList();
+                            games.Where(t => t.Item2.LastActionTime.Subtract(DateTime.Now).TotalMinutes < 1).ToList();
                         foreach (Tuple<Guid, Game> endedGame in endedGames)
                         {
                             games.Remove(endedGame);

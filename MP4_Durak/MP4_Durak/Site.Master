@@ -90,7 +90,7 @@
             $.ajax({
                 type: "post", url: "/api/rooms/post",
                 success: function (data, text) {
-                    console.warn(data);
+                    window.localStorage.setItem('roomId', data.Id);
                     location = e.target.pathname;
                 },
                 error: function (request, status, error) {
