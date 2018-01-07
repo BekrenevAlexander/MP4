@@ -19,15 +19,35 @@ namespace Durak.Api
 
         bool _isFirstRound;
         bool _isFirstPlayerAttack;
-        public Game()
+        public Game(Guid firstPlayerId,Guid secondPlayerId)
         {
             _cards = InitCardsColode();
-            _player1=new Player(GetNextCards(6));
-            _player2 = new Player(GetNextCards(6));
+            _player1=new Player(GetNextCards(6), firstPlayerId);
+            _player2 = new Player(GetNextCards(6), secondPlayerId);
             _trump = GetTrump();
             Random random = new Random();
             _isFirstPlayerAttack = random.Next()%2 == 0;
             _isFirstRound = true;
+        }
+
+        public static int CardsColodeSize
+        {
+            get { return _cardsColodeSize; }
+        }
+
+        public int Trump
+        {
+            get { return _trump; }
+        }
+
+        public bool IsFirstRound
+        {
+            get { return _isFirstRound; }
+        }
+
+        public bool IsFirstPlayerAttack
+        {
+            get { return _isFirstPlayerAttack; }
         }
 
         private Queue<int> InitCardsColode()
@@ -68,7 +88,7 @@ namespace Durak.Api
             return cards;
         }
 
-        private int GetTrump()
+        public int GetTrump()
         {
             return _cards.Peek()/10;
         }

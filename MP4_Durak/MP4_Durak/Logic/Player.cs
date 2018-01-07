@@ -7,10 +7,19 @@ namespace Durak.Api
     public class Player
     {
         List<int> _cards;
+        Guid id;
 
-        public Player(List<int> cards)
+
+
+        public Player(List<int> cards,Guid id)
         {
             _cards = cards;
+            this.id=id;
+        }
+
+        public Guid Id
+        {
+            get { return id; }
         }
 
         public List<int> Cards

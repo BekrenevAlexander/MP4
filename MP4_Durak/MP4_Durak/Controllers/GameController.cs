@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Durak.Api;
 using Microsoft.AspNet.Identity;
 using MP4_Durak.Logic;
 using MP4_Durak.Models;
@@ -12,29 +13,49 @@ namespace MP4_Durak
 {
     public class GameController : ApiController
     {
-        // GET api/<controller>
-        public List<Room> Get()
+        public List<int> GetCards(Guid gameId)
         {
-            return RoomsService.GetInstance().GetRooms();
+            Game game=RoomsService.GetInstance().GetGame(gameId);
+            if (game.GetAttacker().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                return game.GetAttacker().Cards;
+            }
+            if (game.GetDefender().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                return game.GetDefender().Cards;
+            }
+            return null;
         }
 
-        // POST api/<controller>
-        public Room Post()
+        public bool GetAttacker(Guid gameId)
         {
-            Room room = new Room(Guid.Parse(User.Identity.GetUserId()), User.Identity.Name, Guid.Parse(User.Identity.GetUserId()));
-            RoomsService.GetInstance().AddRoom(room);
-            return room;
-        }
-        // DELETE api/<controller>/5
-        public void Delete()
-        {
-            RoomsService.GetInstance().RemoveRoom(Guid.Parse(User.Identity.GetUserId()));
+            return RoomsService.GetInstance().GetGame(gameId).IsFirstPlayerAttack;
         }
 
+        public int GetTrump(Guid gameId)
+        {
+            return RoomsService.GetInstance().GetGame(gameId).Trump;
+        }
 
+        public void Attack(Guid gameId, int card)
+        {
+            RoomsService.GetInstance().GetGame(gameId).Attack(card);
+        }
 
-        public void 
+        public void Defend(Guid gameId, int attackCard, int defendCard)
+        {
+            RoomsService.GetInstance().GetGame(gameId).Defend(attackCard, defendCard);
+        }
 
+        public void DefenderGetCards(Guid gameId)
+        {
+            RoomsService.GetInstance().GetGame(gameId).DefenderGetCards();
+        }
+
+        public void DefenderWinRound(Guid gameId)
+        {
+            RoomsService.GetInstance().GetGame(gameId).DefenderWinRound();
+        }
 
     }
 }
