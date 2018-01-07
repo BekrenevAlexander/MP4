@@ -17,6 +17,9 @@ namespace Durak.Api
 
         Round _currentRound;
 
+        DateTime lastActionTime;
+        Player lastActionPlayer;
+
         bool _isFirstRound;
         bool _isFirstPlayerAttack;
         public Game(Guid firstPlayerId,Guid secondPlayerId)
@@ -28,6 +31,19 @@ namespace Durak.Api
             Random random = new Random();
             _isFirstPlayerAttack = random.Next()%2 == 0;
             _isFirstRound = true;
+            lastActionTime=DateTime.Now;
+        }
+
+        public Player LastActionPlayer
+        {
+            get { return lastActionPlayer; }
+            set { lastActionPlayer = value; }
+        }
+
+        public DateTime LastActionTime
+        {
+            get { return lastActionTime; }
+            set { lastActionTime = value; }
         }
 
         public static int CardsColodeSize
@@ -133,6 +149,8 @@ namespace Durak.Api
                 _currentRound.Attack(card);
             }
             GetAttacker().RemoveCard(card);
+            lastActionPlayer = GetAttacker();
+            lastActionTime=DateTime.Now;
         }
 
         public void Defend(int attackCard, int defendCard)
@@ -144,12 +162,16 @@ namespace Durak.Api
 
             _currentRound.Defend(attackCard, defendCard);
             GetDefender().RemoveCard(defendCard);
+            lastActionPlayer = GetDefender();
+            lastActionTime = DateTime.Now;
         }
 
         public bool DefenderGetCards()
         {
             GetDefender().AddCards(_currentRound.GetAllCards());
             EndRound(_isFirstPlayerAttack);
+            lastActionPlayer = GetDefender();
+            lastActionTime = DateTime.Now;
             return GetAttacker().Cards.Count == 0 || GetDefender().Cards.Count == 0;
         }
 
@@ -158,6 +180,8 @@ namespace Durak.Api
             _isFirstRound = false;
             EndRound(_isFirstPlayerAttack);
             _isFirstPlayerAttack = !_isFirstPlayerAttack;
+            lastActionPlayer = GetAttacker();
+            lastActionTime = DateTime.Now;
             return GetAttacker().Cards.Count == 0|| GetDefender().Cards.Count == 0;
         }
 
@@ -168,6 +192,31 @@ namespace Durak.Api
             if (_player2.Cards.Count == 0)
                 return false;
             throw new Exception("Никто не победил");
+        }
+
+        public List<string> GetMessages(Guid playerId)
+        {
+            if (_player1.Id.Equals(playerId))
+            {
+                return _player2.GetMessages();
+            }
+            if (_player2.Id.Equals(playerId))
+            {
+                return _player1.GetMessages();
+            }
+            throw new Exception("Нет такого пользователя");
+        }
+
+        public void AddMessage(Guid playerId,string message)
+        {
+            if (_player1.Id.Equals(playerId))
+            {
+                _player1.AddMessage(message);
+            }
+            if (_player2.Id.Equals(playerId))
+            {
+                _player2.AddMessage(message);
+            }
         }
     }
 }

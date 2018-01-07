@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Providers.Entities;
 using Durak.Api;
@@ -13,6 +14,7 @@ namespace MP4_Durak.Logic
     {
         private static RoomsService _service;
         private List<Room> rooms;
+        Thread recycleThread;
 
         private List<Tuple<Guid, Game>> games;
 
@@ -20,6 +22,8 @@ namespace MP4_Durak.Logic
         {
             rooms=new List<Room>();
             games=new List<Tuple<Guid, Game>>();
+            recycleThread=new Thread(CheckActivity);
+            recycleThread.Start();
         }
         public static RoomsService GetInstance()
         {
@@ -28,6 +32,36 @@ namespace MP4_Durak.Logic
                     _service=new RoomsService();
                 }
                 return _service;
+        }
+
+        public void CheckActivity()
+        {
+            while (true)
+            {
+                try
+                {
+                    lock (rooms)
+                    {
+                        rooms.RemoveAll(t => t.LastActionTime.Subtract(DateTime.Now).TotalMinutes > 1);
+                    }
+                    lock (games)
+                    {
+                        List<Tuple<Guid, Game>> endedGames =
+                            games.Where(t => t.Item2.LastActionTime.Subtract(DateTime.Now).TotalMinutes > 1).ToList();
+                        foreach (Tuple<Guid, Game> endedGame in endedGames)
+                        {
+                            games.Remove(endedGame);
+                        }
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                }
+                Thread.Sleep(TimeSpan.FromMinutes(1));
+            }
+
         }
 
         public List<Room> GetRooms()

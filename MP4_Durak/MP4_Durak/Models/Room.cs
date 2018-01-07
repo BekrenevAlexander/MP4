@@ -11,6 +11,13 @@ namespace MP4_Durak.Models
         string name;
         Guid firstPlayerId;
         Guid secondPlayerId;
+        DateTime lastActionTime;
+
+        public DateTime LastActionTime
+        {
+            get { return lastActionTime; }
+            set { lastActionTime = value; }
+        }
 
         public Room(Guid id, string name, Guid firstPlayerId, Guid secondPlayerId)
         {

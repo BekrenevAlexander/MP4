@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MP4_Durak.Models;
 
 namespace Durak.Api
 {
@@ -8,13 +9,14 @@ namespace Durak.Api
     {
         List<int> _cards;
         Guid id;
-
+        Queue<string> messages; 
 
 
         public Player(List<int> cards,Guid id)
         {
             _cards = cards;
             this.id=id;
+            messages=new Queue<string>();
         }
 
         public Guid Id
@@ -50,5 +52,26 @@ namespace Durak.Api
         {
             _cards.Remove(card);
         }
+
+        public void AddMessage(string message)
+        {
+            lock (messages)
+            {
+                messages.Enqueue(message);
+            }
+        }
+
+        public List<string> GetMessages()
+        {
+            List<string> buffList = new List<string>();
+            lock (messages)
+            {
+                while (messages.Count>0)
+                {
+                    buffList.Add(messages.Dequeue());
+                }
+            }
+            return buffList;
+        } 
     }
 }

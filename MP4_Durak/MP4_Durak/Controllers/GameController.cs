@@ -80,5 +80,18 @@ namespace MP4_Durak
             return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).GetWhoWin();
         }
 
+        [HttpGet]
+        [ActionName("getMessages")]
+        public List<string> GetMessages(string gameId)
+        {
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).GetMessages(Guid.Parse(User.Identity.GetUserId()));
+        }
+
+        [HttpPost]
+        [ActionName("addMessage")]
+        public void AddMessage(string gameId,string message)
+        {
+            RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).AddMessage(Guid.Parse(User.Identity.GetUserId()),message);
+        }
     }
 }
