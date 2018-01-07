@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Durak.Api
 {
-    class CardUtil
+    public class CardUtil
     {
         public static bool CheckForDuplicateCards(List<int> cards, int checkCard)
         {

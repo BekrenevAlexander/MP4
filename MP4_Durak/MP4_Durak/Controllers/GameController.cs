@@ -10,7 +10,7 @@ using MP4_Durak.Models;
 
 namespace MP4_Durak
 {
-    public class RoomsController : ApiController
+    public class GameController : ApiController
     {
         // GET api/<controller>
         public List<Room> Get()
@@ -29,11 +29,6 @@ namespace MP4_Durak
         public void Delete()
         {
             RoomsService.GetInstance().RemoveRoom(Guid.Parse(User.Identity.GetUserId()));
-        }
-
-        public void Connect(Room room)
-        {
-            RoomsService.GetInstance().CreateGame(room);
         }
     }
 }

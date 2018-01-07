@@ -4,15 +4,13 @@ using System.Linq;
 
 namespace Durak.Api
 {
-    class Player
+    public class Player
     {
         List<int> _cards;
-        string _name;
 
-        public Player(List<int> cards, string name)
+        public Player(List<int> cards)
         {
             _cards = cards;
-            _name = name;
         }
 
         public List<int> Cards
@@ -23,11 +21,6 @@ namespace Durak.Api
                 _cards.CopyTo(buffList);
                 return buffList.ToList();
             }
-        }
-
-        public string Name
-        {
-            get { return _name; }
         }
 
         public void AddCards(List<int> newCards)

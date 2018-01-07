@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Durak.Api
 {
-    class Round
+    public class Round
     {
         int _trump;
         List<CardPair> _cardPairs;

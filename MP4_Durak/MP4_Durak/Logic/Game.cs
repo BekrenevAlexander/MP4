@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Durak.Api
 {
-    class Game
+    public class Game
     {
         static readonly int _cardsColodeSize = 36;
 
@@ -20,11 +19,11 @@ namespace Durak.Api
 
         bool _isFirstRound;
         bool _isFirstPlayerAttack;
-        public Game(string playerOneName, string playerTwoName)
+        public Game()
         {
             _cards = InitCardsColode();
-            _player1=new Player(GetNextCards(6), playerOneName);
-            _player2 = new Player(GetNextCards(6), playerTwoName);
+            _player1=new Player(GetNextCards(6));
+            _player2 = new Player(GetNextCards(6));
             _trump = GetTrump();
             Random random = new Random();
             _isFirstPlayerAttack = random.Next()%2 == 0;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Durak.Api
 {
-    class CardPair
+    public class CardPair
     {
         int _attack;
         int _defend;
