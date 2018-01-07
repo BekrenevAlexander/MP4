@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Routing;
+using Durak.Api;
 using Microsoft.AspNet.Identity;
 using MP4_Durak.Logic;
 using MP4_Durak.Models;
@@ -18,6 +19,13 @@ namespace MP4_Durak
         public List<Room> Get()
         {
             return RoomsService.GetInstance().GetRooms();
+        }
+
+        [HttpGet]
+        [ActionName("getGame")]
+        public Game GetGame(string roomId)
+        {
+            return RoomsService.GetInstance().GetGame(Guid.Parse(roomId));
         }
 
         // POST api/<controller>
@@ -36,11 +44,11 @@ namespace MP4_Durak
         }
         [HttpPost]
         [ActionName("connect")]
-        public void Connect(string roomId)
+        public Game Connect(string roomId)
         {
             Room room=RoomsService.GetInstance().GetRoom(Guid.Parse(roomId));
             room.SecondPlayerId= Guid.Parse(User.Identity.GetUserId());
-            RoomsService.GetInstance().CreateGame(room);
+            return RoomsService.GetInstance().CreateGame(room).Item2;
         }
     }
 }
