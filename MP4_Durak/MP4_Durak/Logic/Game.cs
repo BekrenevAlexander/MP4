@@ -203,6 +203,11 @@ namespace Durak.Api
             }
         }
 
+        public int GetCardsCountInColode()
+        {
+            return _cards.Count;
+        }
+
         public bool GetIsRoundEnd()
         {
             return _currentRound == null ;

@@ -55,6 +55,13 @@ namespace MP4_Durak
         }
 
         [HttpGet]
+        [ActionName("getCardsCountInColode")]
+        public int GetCardsCountInColode(string gameId)
+        {
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).GetCardsCountInColode();
+        }
+
+        [HttpGet]
         [ActionName("getAttacker")]
         public bool GetAttacker(string gameId)
         {
