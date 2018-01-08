@@ -100,7 +100,14 @@ namespace MP4_Durak.Logic
 
         public Game GetGame(Guid id)
         {
-            return games.Find(t => t.Item1.Equals(id)).Item2;
+            try
+            {
+                return games.Find(t => t.Item1.Equals(id)).Item2;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public Room GetRoom(Guid id)

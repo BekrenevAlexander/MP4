@@ -190,8 +190,13 @@
         }
 
         var view = {
-            userCards: function() {
+            userCards: function () {
+                var parent = $('.myField .cards').empty();
+
                 $.each(cards, function (key, card) {
+                    $('<div/>', { class: "card" }).append(
+                        $('<div/>', { class: "cardContent", 'data-val': card, style: `background: src("/Images/${cardConvector(card)}")`})
+                    ).appendTo(parent);
                     console.warn(cardConvector(card));
                 });
             },
@@ -209,7 +214,7 @@
                 3: 'piki'
             }
                 
-            return mast[Math.floor(cardId / 9)] + (cardId % 9 + 6);
+            return mast[Math.floor(cardId / 10)] + (cardId % 10 + 6);
         }
     </script>
 
