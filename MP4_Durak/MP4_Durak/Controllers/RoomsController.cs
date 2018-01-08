@@ -32,7 +32,10 @@ namespace MP4_Durak
         [HttpPost]
         public Room Post()
         {
-            Room room = new Room(Guid.Parse(User.Identity.GetUserId()), User.Identity.Name, Guid.Parse(User.Identity.GetUserId()));
+            var context = ApplicationDbContext.Create();
+            var usersContext = context.Users;
+            ApplicationUser user = usersContext.Find(Guid.Parse(User.Identity.GetUserId()));
+            Room room = new Room(Guid.Parse(User.Identity.GetUserId()), User.Identity.Name, Guid.Parse(User.Identity.GetUserId()),user.Games,user.Wins);
             RoomsService.GetInstance().AddRoom(room);
             return room;
         }

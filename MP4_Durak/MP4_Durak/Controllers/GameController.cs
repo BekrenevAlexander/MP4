@@ -107,7 +107,7 @@ namespace MP4_Durak
         [ActionName("isRoundEnd")]
         public bool IsRoundEnd(string gameId)
         {
-            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).DefenderGetCards();
+            return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).GetIsRoundEnd();
         }
 
         [HttpGet]

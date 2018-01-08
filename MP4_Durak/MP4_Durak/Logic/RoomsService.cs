@@ -47,6 +47,18 @@ namespace MP4_Durak.Logic
                             games.Where(t => t.Item2.LastActionTime.Subtract(DateTime.Now).TotalMinutes < 1).ToList();
                         foreach (Tuple<Guid, Game> endedGame in endedGames)
                         {
+                            Guid winnerId=endedGame.Item2.LastActionPlayer.Id;
+                            Guid looserId=endedGame.Item2.GetAttacker().Id.Equals(endedGame.Item2.LastActionPlayer.Id)? endedGame.Item2.GetDefender().Id: endedGame.Item2.GetAttacker().Id;
+                            var context = ApplicationDbContext.Create();
+                            var usersContext = context.Users;
+                            ApplicationUser user = usersContext.Find(winnerId);
+                            user.Games++;
+                            user.Wins++;
+                            context.SaveChanges();
+
+                            user = usersContext.Find(looserId);
+                            user.Games++;
+                            context.SaveChanges();
                             games.Remove(endedGame);
                             lock (rooms)
                             {

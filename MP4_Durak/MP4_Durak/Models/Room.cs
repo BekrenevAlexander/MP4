@@ -10,6 +10,8 @@ namespace MP4_Durak.Models
         Guid id;
         string name;
         Guid firstPlayerId;
+        int games;
+        int wins;
         Guid secondPlayerId;
         DateTime lastActionTime;
 
@@ -27,11 +29,13 @@ namespace MP4_Durak.Models
             this.secondPlayerId = secondPlayerId;
         }
 
-        public Room(Guid id, string name, Guid firstPlayerId)
+        public Room(Guid id, string name, Guid firstPlayerId,int games, int wins)
         {
             this.id = id;
             this.name = name;
             this.firstPlayerId = firstPlayerId;
+            this.games = games;
+            this.wins = wins;
         }
 
         public Room()

@@ -13,6 +13,8 @@ namespace MP4_Durak.Models
     // Чтобы добавить данные для пользователя, можно добавить свойства в класс User. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
     public class ApplicationUser : IdentityUser
     {
+        public int Wins { get; set; }
+        public int Games { get; set; }
         public ClaimsIdentity GenerateUserIdentity(ApplicationUserManager manager)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType

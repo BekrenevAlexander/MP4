@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Providers.Entities;
+using Microsoft.Owin.Security.Provider;
+using MP4_Durak.Models;
 
 namespace Durak.Api
 {
@@ -122,6 +125,7 @@ namespace Durak.Api
                 _player2.AddCards(GetNextCards(6 - _player2.Cards.Count));
                 _player1.AddCards(GetNextCards(6 - _player1.Cards.Count));
             }
+            SaveGameResults();
             
         }
         public Player GetAttacker()
@@ -164,6 +168,39 @@ namespace Durak.Api
             GetDefender().RemoveCard(defendCard);
             lastActionPlayer = GetDefender();
             lastActionTime = DateTime.Now;
+        }
+
+        private void SaveGameResults()
+        {
+            try
+            {
+                Guid winnerId;
+                Guid looserId;
+                if (GetWhoWin())
+                {
+                    winnerId = _player1.Id;
+                    looserId = _player2.Id;
+                }
+                else
+                {
+                    winnerId = _player2.Id;
+                    looserId = _player1.Id;
+                }
+                var context = ApplicationDbContext.Create();
+                var usersContext = context.Users;
+                ApplicationUser user = usersContext.Find(winnerId);
+                user.Games++;
+                user.Wins++;
+                context.SaveChanges();
+
+                user = usersContext.Find(looserId);
+                user.Games++;
+                context.SaveChanges();
+            }
+            catch
+            {
+
+            }
         }
 
         public bool GetIsRoundEnd()
