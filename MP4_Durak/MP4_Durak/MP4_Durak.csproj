@@ -376,8 +376,22 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Game1.aspx.cs">
+      <DependentUpon>Game1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Game1.aspx.designer.cs">
+      <DependentUpon>Game1.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ListRooms.aspx.cs">
+      <DependentUpon>ListRooms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ListRooms.aspx.designer.cs">
+      <DependentUpon>ListRooms.aspx</DependentUpon>
     </Compile>
     <Compile Include="Logic\CardPair.cs" />
     <Compile Include="Logic\CardUtil.cs" />
