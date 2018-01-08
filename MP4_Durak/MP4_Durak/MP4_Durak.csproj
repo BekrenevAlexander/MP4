@@ -367,6 +367,7 @@
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -374,22 +375,8 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Game1.aspx.cs">
-      <DependentUpon>Game1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Game1.aspx.designer.cs">
-      <DependentUpon>Game1.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="ListRooms.aspx.cs">
-      <DependentUpon>ListRooms.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="ListRooms.aspx.designer.cs">
-      <DependentUpon>ListRooms.aspx</DependentUpon>
     </Compile>
     <Compile Include="Logic\CardPair.cs" />
     <Compile Include="Logic\CardUtil.cs" />
@@ -397,6 +384,15 @@
     <Compile Include="Logic\Player.cs" />
     <Compile Include="Logic\RoomsService.cs" />
     <Compile Include="Logic\Round.cs" />
+    <Compile Include="Migrations\201801070647230_InitialCreate.cs" />
+    <Compile Include="Migrations\201801070647230_InitialCreate.Designer.cs">
+      <DependentUpon>201801070647230_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801081121365_first.cs" />
+    <Compile Include="Migrations\201801081121365_first.Designer.cs">
+      <DependentUpon>201801081121365_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Room.cs" />
@@ -428,6 +424,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201801070647230_InitialCreate.resx">
+      <DependentUpon>201801070647230_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801081121365_first.resx">
+      <DependentUpon>201801081121365_first.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
