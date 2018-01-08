@@ -9,36 +9,6 @@
     <div class="gameField">
         <div class="protivnic">
             <div class="cards">
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/back.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/back.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/back.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/back.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/back.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/back.jpg");'>
-
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -68,9 +38,10 @@
     <script>
         var roomId = window.localStorage.getItem('roomId');
         var player = window.localStorage.getItem('player');
+        var countCardsProtivnic;
         var cards = [];
         var cardsOnTable = [];
-        var ataker;
+        var atacker;
         var trump;
         if (roomId) {
             checkStartGame();
@@ -100,9 +71,16 @@
             getAllCardsOnTable();
             getAttacker();
             getTrump();
+            getEnemyCardsCount();
+
+            if (player == atacker) {
+                view.infoBlock('Вы атакуете')
+            } else {
+                view.infoBlock('Вы защищаетесь')
+            }
         }
 
-
+        // Получить карты 
         function getCards() {
             $.ajax({
                 type: "get", url: `/api/game/getCards?gameId=${roomId}`,
@@ -117,6 +95,7 @@
             });
         }
 
+        // Получить карты на столе
         function getAllCardsOnTable() {
             $.ajax({
                 type: "get", url: `/api/game/getAllCardsOnTable?gameId=${roomId}`,
@@ -130,12 +109,13 @@
             });
         }
 
+        // Узнать кто атакует
         function getAttacker() {
             $.ajax({
                 type: "get", url: `/api/game/getAttacker?gameId=${roomId}`,
                 success: function (data, text) {
                     console.warn('getAttacker', data);
-                    cardsOnTable = data;
+                    atacker = data;
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -143,6 +123,7 @@
             });
         }
         
+        // Получить козырь
         function getTrump() {
             $.ajax({
                 type: "get", url: `/api/game/getTrump?gameId=${roomId}`,
@@ -157,6 +138,22 @@
             });
         }
 
+        // Получить кол-вв корт противнка
+        function getEnemyCardsCount() {
+            $.ajax({
+                type: "get", url: `/api/game/getEnemyCardsCount?gameId=${roomId}`,
+                success: function (data, text) {
+                    console.warn('getEnemyCardsCount', data);
+                    countCardsProtivnic = data;
+                    view.protivnicCards();
+                },
+                error: function (request, status, error) {
+                    console.warn(error);
+                }
+            });
+        }
+
+        // отобра же ни е
         var view = {
             userCards: function () {
                 var parent = $('.myField .cards').empty();
@@ -167,6 +164,16 @@
                     ).appendTo(parent);
                     console.warn(cardConvector(card));
                 });
+            },
+
+            protivnicCards: function () {
+                var parent = $('.protivnic .cards').empty();
+                console.warn(cards);
+                for (var i = 0; i < countCardsProtivnic; i++) {
+                    $('<div/>', { class: "card" }).append(
+                        $('<div/>', { class: "cardContent", style: `background: url("/Images/back.jpg")`})
+                    ).appendTo(parent);
+                };
             },
 
             table: function () {
@@ -182,6 +189,10 @@
                     $('<div/>', { class: "cardContent", style: `background: url("/Images/back.jpg")` })
                 ).appendTo(parent);
 
+            },
+
+            infoBlock: function (mes) {
+                $('.pole').append($('<div/>', { class: 'infoMessage' }).append(mes));
             }
         }
 
@@ -288,6 +299,20 @@
         .myField .cardContent:hover {
             top: -50px;
             transition: all 0.5s;
+        }
+
+        .infoMessage {
+            position: absolute;
+            left: calc(50% - 75px);
+            z-index: 100;
+            width: 150px;
+            text-align: center;
+            background: #ffffff00;
+            border: 1px solid #00000021;
+            border-radius: 5px;
+            padding: 5px;
+            top: 601px;
+            box-shadow: 2px 2px 6px 0px #00000038;
         }
 
         .message {
