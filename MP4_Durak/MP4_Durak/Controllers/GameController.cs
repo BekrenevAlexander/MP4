@@ -45,11 +45,11 @@ namespace MP4_Durak
             Game game = RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
             if (game.GetAttacker().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
             {
-                return game.GetAttacker().Cards.Count;
+                return game.GetDefender().Cards.Count;
             }
             if (game.GetDefender().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
             {
-                return game.GetDefender().Cards.Count;
+                return game.GetAttacker().Cards.Count;
             }
             return -1;
         }
