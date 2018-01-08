@@ -188,12 +188,12 @@ namespace Durak.Api
                 }
                 var context = ApplicationDbContext.Create();
                 var usersContext = context.Users;
-                ApplicationUser user = usersContext.Find(winnerId);
+                ApplicationUser user = usersContext.Find(winnerId.ToString());
                 user.Games++;
                 user.Wins++;
                 context.SaveChanges();
 
-                user = usersContext.Find(looserId);
+                user = usersContext.Find(looserId.ToString());
                 user.Games++;
                 context.SaveChanges();
             }
