@@ -231,7 +231,7 @@ namespace Durak.Api
             }
             catch
             {
-                return 
+                return null; 
             }
         } 
     }
