@@ -54,46 +54,12 @@
                 </div>
             </div>
             <div class="calloda">
-                <div class="cosir">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/piki8.jpg");'></div>
-                </div>
-                <div class="other">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/back.jpg");'></div>
-                </div>
+                
             </div>
         </div>
         <div class="myField">
             <div class="cards">
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/kresti6.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/kresti14.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/bubi9.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/chervi6.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/chervi7.jpg");'>
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="cardContent" style='z-index:1; background:url("/Images/chervi11.jpg");'>
-
-                    </div>
-                </div>
+                
 
             </div>
         </div>
@@ -101,6 +67,7 @@
 
     <script>
         var roomId = window.localStorage.getItem('roomId');
+        var player = window.localStorage.getItem('player');
         var cards = [];
         var cardsOnTable = [];
         var ataker;
@@ -182,6 +149,7 @@
                 success: function (data, text) {
                     console.warn('getTrump', data);
                     trump = data;
+                    view.calods();
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -192,16 +160,27 @@
         var view = {
             userCards: function () {
                 var parent = $('.myField .cards').empty();
-
+                console.warn(cards);
                 $.each(cards, function (key, card) {
                     $('<div/>', { class: "card" }).append(
-                        $('<div/>', { class: "cardContent", 'data-val': card, style: `background: src("/Images/${cardConvector(card)}")`})
+                        $('<div/>', { class: "cardContent", 'data-val': card, style: `background: url("/Images/${cardConvector(card)}.jpg")`})
                     ).appendTo(parent);
                     console.warn(cardConvector(card));
                 });
             },
 
             table: function () {
+
+            },
+
+            calods: function () {
+                var parent = $('.calloda').empty();
+                $('<div/>', { class: 'cosir' }).append(
+                    $('<div/>', { class: "cardContent", style: `background: url("/Images/${cardConvector(parseInt(`${trump}3`))}.jpg")` })
+                ).appendTo(parent);
+                $('<div/>', { class: 'other' }).append(
+                    $('<div/>', { class: "cardContent", style: `background: url("/Images/back.jpg")` })
+                ).appendTo(parent);
 
             }
         }
@@ -214,7 +193,7 @@
                 3: 'piki'
             }
                 
-            return mast[Math.floor(cardId / 10)] + (cardId % 10 + 6);
+            return mast[Math.floor(cardId / 10)] + (cardId % 10 + 5);
         }
     </script>
 
