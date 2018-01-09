@@ -36,7 +36,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://unpkg.com/interactjs@1.3.3/dist/interact.min.js"></script>
         <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.js"></script>
     <script>
         var roomId = window.localStorage.getItem('roomId');
@@ -70,20 +69,25 @@
             }, 2000);
         }
         
+        var activeGame;
         function startGame() {
             getAllCardsOnTable();
             getAttacker();
             getTrump();
             
-            setInterval(function () {
-                getAllCardsOnTable();
-                getAttacker();
-                getTrump();
-                getCards();
-                getEnemyCardsCount();
-                getAllCardsOnTable();
-                checkAttacks();
+            activeGame = setInterval(function () {
+                getAll();
             }, 2000);
+        }
+
+        function getAll() {
+            getAttacker();
+            getTrump();
+            checkAttacks();
+            checkWinner();
+            getAllCardsOnTable();
+            getCards();
+            getEnemyCardsCount();
         }
 
         function checkAttacks() {
@@ -102,6 +106,19 @@
         }
 
 
+        function checkWinner() {
+            $.ajax({
+                type: "get", url: `/api/game/getWhoWin?gameId=${roomId}`,
+                success: function (data, text) {
+                    clearInterval(activeGame);
+                    view.endGameMessage(data.toString() == player);
+                },
+                error: function (request, status, error) {
+                    console.warn(error);
+                }
+            });
+        }
+
         // Атака
         function atack(card) {
             $.ajax({
@@ -110,6 +127,7 @@
                     console.warn('attack', data);
                     cards = data;
                     view.atackCard(card);
+                    getAll();
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -124,9 +142,7 @@
                 success: function (data, text) {
                     console.warn('defend', data);
                     cards = data;
-                    getCards();
-                    getEnemyCardsCount();
-                    getAllCardsOnTable();
+                    getAll();
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -174,7 +190,10 @@
                 type: "get", url: `/api/game/getAttacker?gameId=${roomId}`,
                 success: function (data, text) {
                     console.warn('getAttacker', data);
-                    atacker = data;
+                    if (atacker != data) {
+                        atacker = data;
+                        view.userCards();
+                    }
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -188,8 +207,10 @@
                 type: "get", url: `/api/game/getTrump?gameId=${roomId}`,
                 success: function (data, text) {
                     console.warn('getTrump', data);
-                    trump = data;
-                    view.calods();
+                    if (trump != data) {
+                        trump = data;
+                        view.calods();
+                    }
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -203,8 +224,11 @@
                 type: "get", url: `/api/game/getEnemyCardsCount?gameId=${roomId}`,
                 success: function (data, text) {
                     console.warn('getEnemyCardsCount', data);
-                    countCardsProtivnic = data;
-                    view.protivnicCards();
+                    if (countCardsProtivnic != data) {
+                        countCardsProtivnic = data;
+                        view.protivnicCards();
+                        view.userCards();
+                    }
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -216,9 +240,7 @@
             $.ajax({
                 type: "get", url: `/api/game/defenderGetCards?gameId=${roomId}`,
                 success: function (data, text) {
-                    console.warn('getEnemyCardsCount', data);
-                    countCardsProtivnic = data;
-                    view.protivnicCards();
+                    getAll();
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -230,9 +252,7 @@
             $.ajax({
                 type: "get", url: `/api/game/defenderWinRound?gameId=${roomId}`,
                 success: function (data, text) {
-                    console.warn('getEnemyCardsCount', data);
-                    countCardsProtivnic = data;
-                    view.protivnicCards();
+                    getAll();
                 },
                 error: function (request, status, error) {
                     console.warn(error);
@@ -266,9 +286,9 @@
                             .on('dragEnd', function (event, pointer) {
                                 var area = $('.without').offset();
                                 console.warn('drag', pointer, area);
-                                console.warn(area.top < pointer.screenY, area.top + 200 > pointer.screenY, area.left < pointer.screenX, area.left + 125 > pointer.screenX)
+                                console.warn(area.top < pointer.screenY, area.top + 300 > pointer.screenY, area.left < pointer.screenX, area.left + 225 > pointer.screenX)
                                 if (area) {
-                                    if (area.top < pointer.screenY && area.top + 200 > pointer.screenY && area.left < pointer.screenX && area.left + 125 > pointer.screenX) {
+                                    if (area.top < pointer.screenY && area.top + 300 > pointer.screenY && area.left < pointer.screenX && area.left + 225 > pointer.screenX) {
                                         defend($($('.without').parent().parent().find('.attackCard .cardContent')).data('val'), card2.data('val'));
                                     } else {
                                         view.userCards();
@@ -349,6 +369,19 @@
                     )
                 )
                 oldParent.remove();
+            },
+
+            endGameMessage: function (res) {
+                var parent = $('.gameField').empty();
+                
+                var mes = $('<div/>', {class: 'message'}).appendTo(parent);
+                $('<span/>').append(
+                    res ? 
+                    'Поздравляем!! Вы победили.' :
+                    'Поздравляем. Ты проиграл.'
+                ).appendTo(mes);
+
+                $('<div/>', { class: 'infoBtn', style: 'margin-top: 30px;' }).append('Продолжить').appendTo(mes).on('click', function () { location = '/ListRooms'; })
             }
         }
 
@@ -472,6 +505,7 @@
 
         .infoBtn {
             z-index: 10;
+            cursor:pointer;
             display:inline-block;
             width: 125px;
             text-align: center;
