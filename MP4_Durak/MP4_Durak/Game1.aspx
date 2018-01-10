@@ -34,6 +34,45 @@
             </div>
         </div>
     </div>
+
+    <div id="chatAndMessage" style="display:none;">
+        <div style="position:absolute;bottom:0;">
+        <input id="username" value="<%=Context.User.Identity.GetUserName()%>" style="display:none;" />
+        <textarea style="width:100%;" id="messengerText"></textarea>
+        <input type="button" class="btn btn-default" id="sendMessage" value="Отправить">
+        </div>
+    </div>
+    <script>
+        var socket,
+            txt =$('#messengerText'),
+            user = $('#username'),
+            messages = $('#chatAndMessage');
+
+        if (typeof (WebSocket) !== 'undefined') {
+            socket = new WebSocket("ws://localhost/MP4_Durak/ChatHandler.ashx");
+        } else {
+            socket = new MozWebSocket("ws://localhost/MP4_Durak/ChatHandler.ashx");
+        }
+
+        socket.onmessage = function (msg) {
+            var mesmaindiv = $('<div/>', { class: 'messageInChat' });
+            var mesinnerdiv = $('<div/>', { class: 'messageManager' }).append(msg.data.replace(/\0/g, ''));
+            console.log(msg);
+            mesmaindiv.append(mesinnerdiv);
+            messages.append(mesmaindiv);
+        };
+
+        socket.onclose = function (event) {
+            alert('Потеряна связь. Пожалуйста, обновите страницу');
+        };
+
+        document.getElementById('sendMessage').onclick = function () {
+            socket.send(user.val() + ': ' + txt.val());
+            txt.val() = '';
+            txt.empty();
+        };
+    </script>
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.js"></script>
@@ -58,6 +97,7 @@
                     success: function (data, text) {
                         if (data) {
                             $('.message').remove();
+                            $('#chatAndMessage').show();
                             clearTimeout(interval);
                             startGame();
                         }
@@ -576,6 +616,36 @@
             to {
                 transform:rotate(360deg);
             }
+        }
+        #chatAndMessage {
+            width: 20%;
+            height: 450px;
+            overflow-y: auto;
+            border: 1px solid #dbdbdd;
+            background: #ffffff;
+            float: left;
+            position: fixed;
+            margin-top: -500px;
+    
+        }
+
+        .messageInChat {
+            overflow: hidden;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        
+
+        .messageManager {
+            max-width: 286px;
+            background: #dedede;
+            color: black;
+            right: 10px;
+            width: 80%;
+            float: left;
+            padding: 5px;
         }
     </style>
 </asp:Content>

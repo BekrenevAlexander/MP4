@@ -3,7 +3,7 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
         .bg {
-          background: url('/Content/images/cardcarpet.jpg') no-repeat center center;
+          background: url('Content/images/cardcarpet.jpg') no-repeat center center;
           position: fixed;
           width: 100%;
           height: 350px; /*same height as jumbotron */
