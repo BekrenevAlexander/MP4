@@ -19,7 +19,7 @@ namespace Durak.Api
         }
         private bool CheckExistAttackCard(int card)
         {
-            return _cardPairs.Any(t => t.Attack % 10 == card || t.Defend % 10 == card);
+            return _cardPairs.Any(t => t.Attack % 10 == card % 10 || t.Defend % 10 == card % 10);
         }
 
         private CardPair FindCardPair(int attackCard)

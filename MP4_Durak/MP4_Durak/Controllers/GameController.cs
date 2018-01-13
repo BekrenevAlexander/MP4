@@ -138,6 +138,38 @@ namespace MP4_Durak
             return RoomsService.GetInstance().GetGame(Guid.Parse(gameId)).GetMessages(Guid.Parse(User.Identity.GetUserId()));
         }
 
+        [HttpGet]
+        [ActionName("getGameInfo")]
+        public object GetFameInfo(string gameId)
+        {
+            int enemyCardsCount=0;
+            List<int> cards = new List<int>();
+            Game game = RoomsService.GetInstance().GetGame(Guid.Parse(gameId));
+            if (game.GetAttacker().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                enemyCardsCount= game.GetDefender().Cards.Count;
+                cards= game.GetAttacker().Cards;
+            }
+            if (game.GetDefender().Id.Equals(Guid.Parse(User.Identity.GetUserId())))
+            {
+                enemyCardsCount= game.GetAttacker().Cards.Count;
+                cards= game.GetDefender().Cards;
+            }
+
+            return new 
+            {
+                Trump = game.Trump,
+                EnemyCardsCount=enemyCardsCount,
+                Attacker= game.IsFirstPlayerAttack,
+                AllCardsOnTable = game.GetAllCardsOnTable(),
+                CardsOnColode=game.GetCardsCountInColode(),
+                Cards=cards
+
+
+        };
+        }
+
+
         [HttpPost]
         [ActionName("addMessage")]
         public void AddMessage(string gameId,string message)

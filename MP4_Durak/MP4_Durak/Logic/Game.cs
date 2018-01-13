@@ -223,6 +223,11 @@ namespace Durak.Api
 
         public bool DefenderWinRound()
         {
+
+            if (!_currentRound.CheckAllCardsArePaired())
+            {
+                throw new Exception("Не все карты побиты, пожжди епта");
+            }
             _isFirstRound = false;
             EndRound(_isFirstPlayerAttack);
             _isFirstPlayerAttack = !_isFirstPlayerAttack;
