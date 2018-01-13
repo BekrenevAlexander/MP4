@@ -57,7 +57,6 @@
         socket.onmessage = function (msg) {
             var mesmaindiv = $('<div/>', { class: 'messageInChat' });
             var mesinnerdiv = $('<div/>', { class: 'messageManager' }).append(msg.data.replace(/\0/g, ''));
-            console.log(msg);
             mesmaindiv.append(mesinnerdiv);
             messages.append(mesmaindiv);
         };
@@ -88,7 +87,6 @@
             checkStartGame();
         }
         var inArea = false;
-        console.warn('This player->', player);
 
         function checkStartGame() {
             var interval = setInterval(function () {
@@ -103,7 +101,6 @@
                         }
                     },
                     error: function (request, status, error) {
-                        console.warn(error);
                     }
                 });
             }, 2000);
@@ -131,17 +128,33 @@
         }
 
         function checkAttacks() {
-            console.warn('PP', player, atacker)
             if (player == atacker.toString()) {
                 view.infoBlock('Вы атакуете', true)
 
                 $('.myField .cardContent').off('click');
                 $('.myField .cardContent').on('click', function () {
-                    console.warn('clickON CArd')
                     atack($(this).data('val'));
                 });
             } else {
                 view.infoBlock('Вы защищаетесь', false)
+
+                $('.myField .cardContent').draggabilly()
+                            .on('dragStart', function () {
+                                $(this).addClass('move')
+                            })
+                            .on('dragEnd', function (event, pointer) {
+                                var area = $('.without').offset();
+                                if (area) {
+                                    if (area.top < pointer.screenY && area.top + 300 > pointer.screenY && area.left < pointer.screenX && area.left + 225 > pointer.screenX) {
+                                        defend($($('.without').parent().parent().find('.attackCard .cardContent')).data('val'), $(this).data('val'));
+                                    } else {
+                                        view.userCards();
+                                    }
+                                } else {
+                                    view.userCards();
+                                }
+                                checkAttacks();
+                            });
             }
         }
 
@@ -164,7 +177,6 @@
             $.ajax({
                 type: "get", url: `/api/game/doSmth?gameId=${roomId}&attackCard=${card}&defendCard=0`,
                 success: function (data, text) {
-                    console.warn('attack', data);
                     cards = data;
                     view.atackCard(card);
                     getAll();
@@ -180,7 +192,6 @@
             $.ajax({
                 type: "get", url: `/api/game/doSmth?gameId=${roomId}&attackCard=${cardA}&defendCard=${cardD}`,
                 success: function (data, text) {
-                    console.warn('defend', data);
                     cards = data;
                     getAll();
                 },
@@ -195,7 +206,6 @@
             $.ajax({
                 type: "get", url: `/api/game/getCards?gameId=${roomId}`,
                 success: function (data, text) {
-                    console.warn('getCards', data);
                     if (JSON.stringify(cards) != JSON.stringify(data)) {
                         cards = data;
                         view.userCards();
@@ -212,7 +222,6 @@
             $.ajax({
                 type: "get", url: `/api/game/getAllCardsOnTable?gameId=${roomId}`,
                 success: function (data, text) {
-                    console.warn('getAllCardsOnTable', data);
                     if (JSON.stringify(cardsOnTable) != JSON.stringify(data)) {
                         cardsOnTable = data;
                         view.table();
@@ -229,7 +238,6 @@
             $.ajax({
                 type: "get", url: `/api/game/getAttacker?gameId=${roomId}`,
                 success: function (data, text) {
-                    console.warn('getAttacker', data);
                     if (atacker != data) {
                         atacker = data;
                         view.userCards();
@@ -246,7 +254,6 @@
             $.ajax({
                 type: "get", url: `/api/game/getTrump?gameId=${roomId}`,
                 success: function (data, text) {
-                    console.warn('getTrump', data);
                     if (trump != data) {
                         trump = data;
                         view.calods();
@@ -263,7 +270,6 @@
             $.ajax({
                 type: "get", url: `/api/game/getEnemyCardsCount?gameId=${roomId}`,
                 success: function (data, text) {
-                    console.warn('getEnemyCardsCount', data);
                     if (countCardsProtivnic != data) {
                         countCardsProtivnic = data;
                         view.protivnicCards();
@@ -314,19 +320,15 @@
                     var card = $('<div/>', { class: "card" }).append(
                         card2
                     ).appendTo(parent);
-                    console.warn(cardsOnTable);
-
-                    console.warn("DRAG this");
+                    checkAttacks();
+                    /*
                     if (player != atacker.toString() && cardsOnTable && cardsOnTable.length) {
-                        console.warn("DRAG enable");
                         card2.draggabilly()
                             .on('dragStart', function() {
                                 card2.addClass('move')
                             })
                             .on('dragEnd', function (event, pointer) {
                                 var area = $('.without').offset();
-                                console.warn('drag', pointer, area);
-                                console.warn(area.top < pointer.screenY, area.top + 300 > pointer.screenY, area.left < pointer.screenX, area.left + 225 > pointer.screenX)
                                 if (area) {
                                     if (area.top < pointer.screenY && area.top + 300 > pointer.screenY && area.left < pointer.screenX && area.left + 225 > pointer.screenX) {
                                         defend($($('.without').parent().parent().find('.attackCard .cardContent')).data('val'), card2.data('val'));
@@ -337,13 +339,12 @@
                                     view.userCards();
                                 }
                         });
-                    }
+                    }*/
                 });
             },
 
             protivnicCards: function () {
                 var parent = $('.protivnic .cards').empty();
-                console.warn(cards);
                 for (var i = 0; i < countCardsProtivnic; i++) {
                     $('<div/>', { class: "card" }).append(
                         $('<div/>', { class: "cardContent", style: `background: url("/Images/back.jpg")`})
@@ -368,10 +369,8 @@
                         var area = $('<div/>', { class: 'cardContent without'}).appendTo(dk)
                         area.on('mouseenter', function () {
                             inArea = true;
-                            console.warn(inArea);
                         }).on('mouseleave', function () {
                             inArea = false;
-                            console.warn(inArea);
                         });
                     }
                 })
@@ -438,6 +437,23 @@
     </script>
 
     <style>
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        #chatAndMessage {
+            max-width: 250px;
+        }
+
+        .body-content {
+            min-width: 1000px;
+        }
+
         .gameField {
             height: calc(100vh - 141px)
         }
@@ -531,8 +547,10 @@
         }
 
         .myField .card .cardContent:not(.move):hover {
-            top: -50px;
-            transition: all 0.5s;
+           /* top: -50px;
+            transition: all 0.2s;
+            top: -50px; */
+            box-shadow: 0px 0px 20px 3px rgba(89, 186, 255, 0.78);
         }
 
         .infoBlock {
