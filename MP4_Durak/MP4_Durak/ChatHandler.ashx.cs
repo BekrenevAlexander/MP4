@@ -2,20 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Net;
 using System.Net.WebSockets;
 using System.Web.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MP4_Durak
 {
+    class client
+    {
+        public WebSocket socket;
+        public string room;
+
+        public client(WebSocket ws, string room)
+        {
+            this.room = room;
+            this.socket = ws;
+        }
+    }
     /// <summary>
     /// Сводное описание для ChatHandler
     /// </summary>
     public class ChatHandler : IHttpHandler
     {
         // Список всех клиентов
-        private static readonly List<WebSocket> Clients = new List<WebSocket>();
+        private static readonly List<client> Clients = new List<client>();
 
         // Блокировка для обеспечения потокабезопасности
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim();
@@ -30,12 +43,14 @@ namespace MP4_Durak
         {
             // Получаем сокет клиента из контекста запроса
             var socket = context.WebSocket;
-
+            var req = HttpContext.Current.Request;
+            
             // Добавляем его в список клиентов
             Locker.EnterWriteLock();
             try
             {
-                Clients.Add(socket);
+                string roomId = Convert.ToString(req.QueryString["room"]);
+                Clients.Add(new client(socket, roomId));
             }
             finally
             {
@@ -55,13 +70,20 @@ namespace MP4_Durak
                 for (int i = 0; i < Clients.Count; i++)
                 {
 
-                    WebSocket client = Clients[i];
+                    client client = Clients[i];
 
                     try
                     {
-                        if (client.State == WebSocketState.Open)
+                        var requestFront = System.Text.Encoding.Default.GetString(buffer.Array);
+                        dynamic dataFromFront = JsonConvert.DeserializeObject(requestFront);
+
+                        string message = dataFromFront.message;
+                        string room = dataFromFront.room;
+
+                        var message_byte = new ArraySegment<byte>(System.Text.Encoding.Default.GetBytes(message));
+                        if (client.socket.State == WebSocketState.Open && client.room == room)
                         {
-                            await client.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+                            await client.socket.SendAsync(message_byte, WebSocketMessageType.Text, true, CancellationToken.None);
                         }
                     }
 

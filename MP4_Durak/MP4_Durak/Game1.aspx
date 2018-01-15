@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Contact" Language="C#"  MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Game1.aspx.cs" Inherits="MP4_Durak.Game1" %>
+﻿<%@ Page Title="Игра" Language="C#"  MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Game1.aspx.cs" Inherits="MP4_Durak.Game1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class='message'>
@@ -49,9 +49,10 @@
             messages = $('#chatAndMessage');
 
         if (typeof (WebSocket) !== 'undefined') {
-            socket = new WebSocket("ws://localhost/MP4_Durak/ChatHandler.ashx");
+            user_room = window.localStorage.getItem('roomId');
+            socket = new WebSocket("ws://localhost:50191/ChatHandler.ashx?room="+user_room);
         } else {
-            socket = new MozWebSocket("ws://localhost/MP4_Durak/ChatHandler.ashx");
+            socket = new MozWebSocket("ws://localhost:50191/ChatHandler.ashx?room=user_room"+user_room);
         }
 
         socket.onmessage = function (msg) {
@@ -66,8 +67,16 @@
         };
 
         document.getElementById('sendMessage').onclick = function () {
-            socket.send(user.val() + ': ' + txt.val());
-            txt.val() = '';
+            var currentdate = new Date();
+            var time =  currentdate.getHours() + ":"
+                            + currentdate.getMinutes() + ":"
+                            + currentdate.getSeconds();
+            var message_concat = '(' + time +')<b>' + user.val() + '</b>: ' + txt.val()
+            socket.send(JSON.stringify({
+                message: message_concat,
+                room: roomId
+            }));
+            txt.val('');
             txt.empty();
         };
     </script>

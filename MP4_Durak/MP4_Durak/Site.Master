@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - Мое приложение ASP.NET</title>
+    <title>Главная</title>
 
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/bundles/modernizr") %>
@@ -86,7 +86,7 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - Приложение является полетом фантазии студентов гр 147 Бекрнева, Андреева, Липчинского</p>
+                <p>&copy; <%: DateTime.Now.Year %> - Приложение является полетом фантазии студентов гр 147 Бекренева, Андреева, Липчинского</p>
             </footer>
         </div>
     </form>

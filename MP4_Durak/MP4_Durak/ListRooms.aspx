@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Contact" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ListRooms.aspx.cs" Inherits="MP4_Durak.Rooms" %>
+﻿<%@ Page Title="Комнаты" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ListRooms.aspx.cs" Inherits="MP4_Durak.Rooms" %>
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
