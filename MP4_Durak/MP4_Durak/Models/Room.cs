@@ -12,6 +12,7 @@ namespace MP4_Durak.Models
         Guid firstPlayerId;
         int games;
         int wins;
+        bool secondPlayerConnected;
         Guid secondPlayerId;
         DateTime lastActionTime;
 
@@ -64,6 +65,12 @@ namespace MP4_Durak.Models
         {
             get { return secondPlayerId; }
             set { secondPlayerId = value; }
+        }
+
+        public bool SecondPlayerConnected
+        {
+            get { return secondPlayerConnected; }
+            set { secondPlayerConnected = value; }
         }
     }
 }
