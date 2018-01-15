@@ -50,8 +50,21 @@ namespace MP4_Durak
         public Game Connect(string roomId)
         {
             Room room=RoomsService.GetInstance().GetRoom(Guid.Parse(roomId));
-            room.SecondPlayerId= Guid.Parse(User.Identity.GetUserId());
-            return RoomsService.GetInstance().CreateGame(room).Item2;
+            Guid userId = Guid.Parse(User.Identity.GetUserId());
+            if (room.SecondPlayerConnected)
+            {
+                if(room.FirstPlayerId.Equals(userId)|| room.SecondPlayerId.Equals(userId))
+                {
+                    return GetGame(roomId);
+                }
+                throw new Exception("В эту игру уже играют");
+            }
+            else
+            {
+                room.SecondPlayerId = Guid.Parse(User.Identity.GetUserId());
+                return RoomsService.GetInstance().CreateGame(room).Item2;
+            }
+            
         }
     }
 }
